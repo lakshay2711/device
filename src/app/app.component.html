@@ -1,0 +1,20 @@
+<div class="container">           
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Product Number</th>
+        <th>Partner</th>
+        <th>MS Contract ID</th>
+        <th>Last Modified Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let device of devices">
+        <td>{{device.pNo}}</td>
+        <td>{{device.partner}}</td>
+        <td>{{device.contractId}}</td>
+        <td>{{device.lastmodifieddate}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
