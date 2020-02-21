@@ -6,8 +6,20 @@
 }
 table {
     width: 80%;
-    margin: 30px auto;
+    margin: auto;
 }
 table tr {
     height: 60px;
+}
+.main {
+    color: #337ab7;
+    width: 80%;
+    display: flex;
+    margin: 20px auto;
+}
+.file-upload {
+    cursor: pointer;
+}
+.file-upload > input {
+    display: none;
 }
