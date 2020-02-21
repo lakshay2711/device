@@ -49,11 +49,11 @@ export class AppComponent implements OnInit, OnDestroy {
     const file = ev.target.files[0];
     reader.onload = (event) => {
       const data = reader.result;
-      workBook = XLSX.read(data, { type: 'binary' });
+      workBook = XLSX.read(data, { type: 'binary',cellDates:true });
       jsonData = workBook.SheetNames.reduce((initial, name) => {
         const sheet = workBook.Sheets[name];
         initial[name] = XLSX.utils.sheet_to_json(sheet);
-        tempArray = XLSX.utils.sheet_to_json(sheet);
+        tempArray = XLSX.utils.sheet_to_json(sheet, {dateNF:"dd.MM.yyyy"});
         this.devices = tempArray.map(el => {
           if (el.hasOwnProperty("Product Number")) {
             el.pNo = el["Product Number"];
