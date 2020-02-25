@@ -21,8 +21,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.IECheck();
-
     this.deviceSubscription = this.appService.getDevicesDetails()
       .subscribe(data => {
         if (data) {
@@ -89,27 +87,6 @@ export class AppComponent implements OnInit, OnDestroy {
       console.log(jsonData.Sheet1);
     }
     reader.readAsBinaryString(file);
-  }
-
-  IECheck(): void {
-    if (FileReader.prototype.readAsBinaryString === undefined) {
-      FileReader.prototype.readAsBinaryString = function (fileData) {
-        const pt = this;
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const blobURL = URL.createObjectURL(fileData);
-          const xhr = new XMLHttpRequest;
-          xhr.open('get', blobURL);
-          xhr.overrideMimeType('text/plain; charset=x-user-defined');
-          xhr.onload = function () {
-            const g = { target: { result: xhr.response } };
-            pt.onload(g)
-          }
-          xhr.send();
-        }
-        reader.readAsArrayBuffer(fileData);
-      }
-    }
   }
 
   ngOnDestroy() {
