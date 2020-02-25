@@ -20,6 +20,9 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(private appService: AppService) { }
 
   ngOnInit() {
+
+    this.IECheck();
+
     this.deviceSubscription = this.appService.getDevicesDetails()
       .subscribe(data => {
         if (data) {
@@ -49,14 +52,14 @@ export class AppComponent implements OnInit, OnDestroy {
     const file = ev.target.files[0];
     reader.onload = (event) => {
       const data = reader.result;
-      workBook = XLSX.read(data, { 
-      type: 'binary',
-      cellDates: true
-    });
+      workBook = XLSX.read(data, {
+        type: 'binary',
+        cellDates: true
+      });
       jsonData = workBook.SheetNames.reduce((initial, name) => {
         const sheet = workBook.Sheets[name];
         initial[name] = XLSX.utils.sheet_to_json(sheet);
-        tempArray = XLSX.utils.sheet_to_json(sheet, {dateNF:"dd.MM.yyyy"});
+        tempArray = XLSX.utils.sheet_to_json(sheet, { dateNF: "dd.MM.yyyy" });
         this.devices = tempArray.map(el => {
           if (el.hasOwnProperty("Product Number")) {
             el.pNo = el["Product Number"];
@@ -74,9 +77,9 @@ export class AppComponent implements OnInit, OnDestroy {
             el.lastmodifieddate = el["Last Modified Date"];
             delete el["Last Modified Date"];
             var date = new Date(el.lastmodifieddate),
-            mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-            day = ("0" + (date.getDate() + 1)).slice(-2);
-            el.lastmodifieddate = [mnth,day,date.getFullYear()].join("/");
+              mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+              day = ("0" + (date.getDate() + 1)).slice(-2);
+            el.lastmodifieddate = [mnth, day, date.getFullYear()].join("/");
           }
           return el;
         });
@@ -86,6 +89,27 @@ export class AppComponent implements OnInit, OnDestroy {
       console.log(jsonData.Sheet1);
     }
     reader.readAsBinaryString(file);
+  }
+
+  IECheck(): void {
+    if (FileReader.prototype.readAsBinaryString === undefined) {
+      FileReader.prototype.readAsBinaryString = function (fileData) {
+        const pt = this;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const blobURL = URL.createObjectURL(fileData);
+          const xhr = new XMLHttpRequest;
+          xhr.open('get', blobURL);
+          xhr.overrideMimeType('text/plain; charset=x-user-defined');
+          xhr.onload = function () {
+            const g = { target: { result: xhr.response } };
+            pt.onload(g)
+          }
+          xhr.send();
+        }
+        reader.readAsArrayBuffer(fileData);
+      }
+    }
   }
 
   ngOnDestroy() {
