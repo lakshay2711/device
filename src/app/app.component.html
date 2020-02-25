@@ -4,7 +4,7 @@
     <a style="cursor: pointer" (click)="exportexcel()">
       <i class="fa fa-download">&nbsp;Export</i>
     </a>
-    &nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
     <div class="file-upload">
       <label for="file">
         <i class="fa fa-upload">&nbsp;Upload</i>
@@ -13,18 +13,24 @@
     </div>
   </div>
 
-  <table id="excel-table">
-    <tr>
-      <th>Product Number</th>
-      <th>Partner</th>
-      <th>MS Contract ID</th>
-      <th>Last Modified Date</th>
-    </tr>
-    <tr *ngFor="let device of devices">
-      <td>{{device.pNo}}</td>
-      <td>{{device.partner}}</td>
-      <td>{{device.contractId}}</td>
-      <td>{{device.lastmodifieddate}}</td>
-    </tr>
-  </table>
+  <div class="table-responsive"> 
+    <table class="table table-bordered" id="excel-table">
+      <thead>
+        <tr>
+          <th>Product Number</th>
+          <th>Partner</th>
+          <th>MS Contract ID</th>
+          <th>Last Modified Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let device of devices">
+          <td>{{device.pNo}}</td>
+          <td>{{device.partner}}</td>
+          <td>{{device.contractId}}</td>
+          <td>{{device.lastmodifieddate}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

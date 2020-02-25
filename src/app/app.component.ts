@@ -49,7 +49,10 @@ export class AppComponent implements OnInit, OnDestroy {
     const file = ev.target.files[0];
     reader.onload = (event) => {
       const data = reader.result;
-      workBook = XLSX.read(data, { type: 'binary',cellDates:true });
+      workBook = XLSX.read(data, { 
+      type: 'binary',
+      cellDates: true
+    });
       jsonData = workBook.SheetNames.reduce((initial, name) => {
         const sheet = workBook.Sheets[name];
         initial[name] = XLSX.utils.sheet_to_json(sheet);
@@ -70,6 +73,10 @@ export class AppComponent implements OnInit, OnDestroy {
           if (el.hasOwnProperty("Last Modified Date")) {
             el.lastmodifieddate = el["Last Modified Date"];
             delete el["Last Modified Date"];
+            var date = new Date(el.lastmodifieddate),
+            mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+            day = ("0" + (date.getDate() + 1)).slice(-2);
+            el.lastmodifieddate = [mnth,day,date.getFullYear()].join("/");
           }
           return el;
         });
