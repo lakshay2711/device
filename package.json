@@ -28,6 +28,8 @@
     "express": "^4.17.1",
     "file-saver": "^2.0.2",
     "font-awesome": "^4.7.0",
+    "html5-history-api": "^4.2.10",
+    "ie-shim": "^0.1.0",
     "intl": "^1.2.5",
     "path": "^0.12.7",
     "polyfills-ie9": "^1.0.0",
