@@ -46,47 +46,96 @@ export class AppComponent implements OnInit, OnDestroy {
     let workBook = null;
     let jsonData = null;
     let tempArray = [];
-    const reader = new FileReader();
-    const file = ev.target.files[0];
-    reader.onload = (event) => {
-      const data = reader.result;
-      workBook = XLSX.read(data, {
-        type: 'binary',
-        cellDates: true
-      });
-      jsonData = workBook.SheetNames.reduce((initial, name) => {
-        const sheet = workBook.Sheets[name];
-        initial[name] = XLSX.utils.sheet_to_json(sheet);
-        tempArray = XLSX.utils.sheet_to_json(sheet, { dateNF: "dd.MM.yyyy" });
-        this.devices = tempArray.map(el => {
-          if (el.hasOwnProperty("Product Number")) {
-            el.pNo = el["Product Number"];
-            delete el["Product Number"];
+    // const reader = new FileReader();
+    // const file = ev.target.files[0];
+    // reader.onload = (event) => {
+    //   const data = reader.result;
+    //   workBook = XLSX.read(data, {
+    //     type: 'binary',
+    //     cellDates: true
+    //   });
+    //   jsonData = workBook.SheetNames.reduce((initial, name) => {
+    //     const sheet = workBook.Sheets[name];
+    //     initial[name] = XLSX.utils.sheet_to_json(sheet);
+    //     tempArray = XLSX.utils.sheet_to_json(sheet, { dateNF: "dd.MM.yyyy" });
+    //     this.devices = tempArray.map(el => {
+    //       if (el.hasOwnProperty("Product Number")) {
+    //         el.pNo = el["Product Number"];
+    //         delete el["Product Number"];
+    //       }
+    //       if (el.hasOwnProperty("Partner")) {
+    //         el.partner = el["Partner"];
+    //         delete el["Partner"];
+    //       }
+    //       if (el.hasOwnProperty("MS Contract ID")) {
+    //         el.contractId = el["MS Contract ID"];
+    //         delete el["MS Contract ID"];
+    //       }
+    //       if (el.hasOwnProperty("Last Modified Date")) {
+    //         el.lastmodifieddate = el["Last Modified Date"];
+    //         delete el["Last Modified Date"];
+    //         var date = new Date(el.lastmodifieddate),
+    //           mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+    //           day = ("0" + (date.getDate() + 1)).slice(-2);
+    //         el.lastmodifieddate = [mnth, day, date.getFullYear()].join("/");
+    //       }
+    //       return el;
+    //     });
+    //     console.log(this.devices);
+    //     return initial;
+    //   }, {});
+    //   console.log(jsonData.Sheet1);
+    // }
+    // reader.readAsBinaryString(file);
+
+    
+     var files = ev.target.files,file;
+        if (!files || files.length == 0) return;
+        file = files[0];
+        var fileReader = new FileReader();
+        fileReader.onload = (e) => {
+          var filename = file.name;
+          // call 'xlsx' to read the file
+          var binary = "";
+          var bytes = new Uint8Array(e.target.result as any);
+          console.log(e.target.result)
+          var length = bytes.byteLength;
+          for (var i = 0; i < length; i++) {
+            binary += String.fromCharCode(bytes[i]);
           }
-          if (el.hasOwnProperty("Partner")) {
-            el.partner = el["Partner"];
-            delete el["Partner"];
-          }
-          if (el.hasOwnProperty("MS Contract ID")) {
-            el.contractId = el["MS Contract ID"];
-            delete el["MS Contract ID"];
-          }
-          if (el.hasOwnProperty("Last Modified Date")) {
-            el.lastmodifieddate = el["Last Modified Date"];
-            delete el["Last Modified Date"];
-            var date = new Date(el.lastmodifieddate),
-              mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-              day = ("0" + (date.getDate() + 1)).slice(-2);
-            el.lastmodifieddate = [mnth, day, date.getFullYear()].join("/");
-          }
-          return el;
-        });
-        console.log(this.devices);
-        return initial;
-      }, {});
-      console.log(jsonData.Sheet1);
-    }
-    reader.readAsBinaryString(file);
+          workBook = XLSX.read(binary, {type: 'binary', cellDates:true, cellStyles:true});
+          jsonData = workBook.SheetNames.reduce((initial, name) => {
+            const sheet = workBook.Sheets[name];
+            initial[name] = XLSX.utils.sheet_to_json(sheet);
+            tempArray = XLSX.utils.sheet_to_json(sheet, { dateNF: "dd.MM.yyyy" });
+            this.devices = tempArray.map(el => {
+              if (el.hasOwnProperty("Product Number")) {
+                el.pNo = el["Product Number"];
+                delete el["Product Number"];
+              }
+              if (el.hasOwnProperty("Partner")) {
+                el.partner = el["Partner"];
+                delete el["Partner"];
+              }
+              if (el.hasOwnProperty("MS Contract ID")) {
+                el.contractId = el["MS Contract ID"];
+                delete el["MS Contract ID"];
+              }
+              if (el.hasOwnProperty("Last Modified Date")) {
+                el.lastmodifieddate = el["Last Modified Date"];
+                delete el["Last Modified Date"];
+                var date = new Date(el.lastmodifieddate),
+                  mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+                  day = ("0" + (date.getDate() + 1)).slice(-2);
+                el.lastmodifieddate = [mnth, day, date.getFullYear()].join("/");
+              }
+              return el;
+            });
+            return initial;
+          }, {});
+          console.log(jsonData.Sheet1);
+        };
+        fileReader.readAsArrayBuffer(file);
   }
 
   ngOnDestroy() {
