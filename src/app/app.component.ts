@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 
 import { AppService } from './app.service';
 
@@ -25,21 +26,30 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe(data => {
         if (data) {
           this.devices = data;
+          console.log("devices", this.devices);
         }
       });
   }
 
   exportexcel(): void {
-    /* table id is passed over here */
+    // /* table id is passed over here */
+    // let element = document.getElementById('excel-table');
+    // const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    // /* generate workbook and add the worksheet */
+    // const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    // XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    // /* save to file */
+    // XLSX.writeFile(wb, this.fileName);
+
     let element = document.getElementById('excel-table');
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+    const worksheet: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
 
-    /* generate workbook and add the worksheet */
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-    /* save to file */
-    XLSX.writeFile(wb, this.fileName);
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+    FileSaver.saveAs(blob, 'Data.xlsx')
   }
 
   onFileChange(ev) {

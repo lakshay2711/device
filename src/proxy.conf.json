@@ -1,0 +1,10 @@
+{
+    "/api": {
+        "target": "https://ec2rfkpysh.execute-api.us-west-2.amazonaws.com/dev/manual-devices/view",
+        "secure": false,
+        "pathRewrite": {
+            "^/api": ""
+        },
+        "changeOrigin": true
+    }
+}
