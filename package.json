@@ -38,7 +38,7 @@
     "tslib": "^1.10.0",
     "typescript": "~3.7.5",
     "web-animations-js": "^2.3.2",
-    "xlsx": "^0.15.5",
+    "xlsx": "^0.17.0",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
