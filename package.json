@@ -25,7 +25,7 @@
     "bootstrap": "^3.4.1",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.7",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "file-saver": "^2.0.2",
     "font-awesome": "^4.7.0",
     "html5-history-api": "^4.2.10",
